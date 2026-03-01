@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solara Systems — Hurricane-Ready Solar Power for Florida Homes</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sun: #E8A917;
+  --sun-bright: #FFD54F;
+  --sun-deep: #B8860B;
+  --storm: #0D1117;
+  --storm2: #161B22;
+  --storm3: #21262D;
+  --ocean: #1B4965;
+  --sky: #5FA8D3;
+  --palm: #2D6A4F;
+  --sand: #F4E8C1;
+  --white: #F8F9FA;
+  --gray: #8B949E;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Outfit', sans-serif; background: var(--storm); color: var(--white); overflow-x: hidden; }
+
+/* Animated grain overlay */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ========== NAV ========== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 1rem 3rem;
+  display: flex; justify-content: space-between; align-items: center;
+  backdrop-filter: blur(20px);
+  background: rgba(13,17,23,0.85);
+  border-bottom: 1px solid rgba(232,169,23,0.15);
+  transition: all 0.4s;
+}
+nav.scrolled { padding: 0.6rem 3rem; background: rgba(13,17,23,0.95); }
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 800; font-size: 1.4rem; letter-spacing: 2px; color: var(--sun);
+  text-decoration: none;
+}
+.nav-logo .sun-icon {
+  width: 36px; height: 36px;
+  background: radial-gradient(circle, var(--sun-bright), var(--sun));
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(232,169,23,0.4);
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(232,169,23,0.3); }
+  50% { box-shadow: 0 0 35px rgba(232,169,23,0.6); }
+}
+.nav-links { display: flex; gap: 2rem; align-items: center; }
+.nav-links a { color: var(--gray); text-decoration: none; font-weight: 500; font-size: 0.9rem; transition: color 0.3s; }
+.nav-links a:hover { color: var(--sun); }
+.nav-cta {
+  background: var(--sun); color: var(--storm); padding: 10px 24px; border-radius: 6px;
+  font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; text-decoration: none;
+  transition: all 0.3s; border: none; cursor: pointer;
+}
+.nav-cta:hover { background: var(--sun-bright); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(232,169,23,0.4); }
+
+/* ========== HERO ========== */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  background: linear-gradient(180deg, var(--storm) 0%, #0a1628 50%, var(--storm) 100%);
+  overflow: hidden;
+  padding: 6rem 3rem 4rem;
+}
+.hero::before {
+  content: '';
+  position: absolute; top: -50%; right: -20%;
+  width: 800px; height: 800px;
+  background: radial-gradient(circle, rgba(232,169,23,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.hero::after {
+  content: '';
+  position: absolute; bottom: -30%; left: -10%;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(27,73,101,0.12) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.hero-content {
+  max-width: 800px; text-align: center; position: relative; z-index: 2;
+}
+.hero-badge {
+  display: inline-block;
+  background: rgba(232,169,23,0.1);
+  border: 1px solid rgba(232,169,23,0.3);
+  color: var(--sun);
+  padding: 6px 18px;
+  border-radius: 30px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  animation: fadeInUp 0.8s ease;
+}
+.hero h1 {
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  font-weight: 900;
+  line-height: 1.05;
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.8s ease 0.1s both;
+}
+.hero h1 .gold { color: var(--sun); }
+.hero h1 .light { color: var(--white); font-weight: 300; }
+.hero-sub {
+  font-size: 1.2rem;
+  color: var(--gray);
+  font-weight: 400;
+  line-height: 1.7;
+  margin-bottom: 2.5rem;
+  animation: fadeInUp 0.8s ease 0.2s both;
+}
+.hero-actions {
+  display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+  animation: fadeInUp 0.8s ease 0.3s both;
+}
+.btn-primary {
+  background: var(--sun); color: var(--storm); padding: 16px 36px; border-radius: 8px;
+  font-weight: 700; font-size: 1rem; letter-spacing: 1px; text-decoration: none;
+  transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px;
+  border: 2px solid var(--sun);
+}
+.btn-primary:hover { background: var(--sun-bright); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(232,169,23,0.3); }
+.btn-secondary {
+  background: transparent; color: var(--white); padding: 16px 36px; border-radius: 8px;
+  font-weight: 600; font-size: 1rem; text-decoration: none;
+  border: 2px solid var(--storm3); transition: all 0.3s;
+}
+.btn-secondary:hover { border-color: var(--sun); color: var(--sun); }
+.hero-stat-row {
+  display: flex; gap: 3rem; justify-content: center; margin-top: 3rem;
+  animation: fadeInUp 0.8s ease 0.4s both;
+}
+.hero-stat { text-align: center; }
+.hero-stat .num { font-family: 'Space Mono', monospace; font-size: 1.5rem; font-weight: 700; color: var(--sun); }
+.hero-stat .lbl { font-size: 0.7rem; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== TRUST BAR ========== */
+.trust-bar {
+  background: var(--storm2);
+  border-top: 1px solid var(--storm3);
+  border-bottom: 1px solid var(--storm3);
+  padding: 1.5rem 3rem;
+  display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;
+}
+.trust-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.8rem; color: var(--gray); font-weight: 500;
+}
+.trust-item .icon { font-size: 1.2rem; }
+
+/* ========== PRODUCTS ========== */
+.products {
+  padding: 6rem 3rem;
+  max-width: 1200px; margin: 0 auto;
+}
+.section-header { text-align: center; margin-bottom: 4rem; }
+.section-tag {
+  display: inline-block;
+  color: var(--sun);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.section-header h2 { font-size: 2.5rem; font-weight: 800; line-height: 1.1; }
+.section-header p { color: var(--gray); font-size: 1rem; margin-top: 1rem; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+.product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.product-card {
+  background: var(--storm2);
+  border: 1px solid var(--storm3);
+  border-radius: 12px;
+  padding: 2rem;
+  transition: all 0.4s;
+  position: relative;
+  overflow: hidden;
+}
+.product-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--sun), var(--sun-bright));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.product-card:hover { border-color: var(--sun); transform: translateY(-4px); }
+.product-card:hover::before { opacity: 1; }
+.product-card.featured { border-color: var(--sun); }
+.product-card.featured::before { opacity: 1; }
+.product-badge {
+  position: absolute; top: 1rem; right: 1rem;
+  background: var(--sun); color: var(--storm);
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 1px;
+  padding: 4px 10px; border-radius: 3px;
+}
+.product-tier { font-size: 0.7rem; color: var(--sun); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+.product-name { font-size: 1.6rem; font-weight: 800; margin-bottom: 4px; }
+.product-price { font-family: 'Space Mono', monospace; font-size: 2rem; font-weight: 700; color: var(--sun); margin-bottom: 1.5rem; }
+.product-price span { font-size: 0.9rem; color: var(--gray); font-weight: 400; }
+.product-specs { list-style: none; margin-bottom: 2rem; }
+.product-specs li {
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 0.85rem;
+  color: var(--gray);
+  display: flex; align-items: center; gap: 8px;
+}
+.product-specs li::before { content: '⚡'; font-size: 0.7rem; }
+.product-specs li strong { color: var(--white); }
+.product-cta {
+  display: block; width: 100%; text-align: center;
+  padding: 14px; border-radius: 8px;
+  font-weight: 700; font-size: 0.9rem; text-decoration: none;
+  transition: all 0.3s;
+}
+.product-cta.primary { background: var(--sun); color: var(--storm); }
+.product-cta.primary:hover { background: var(--sun-bright); }
+.product-cta.outline { border: 2px solid var(--storm3); color: var(--white); background: transparent; }
+.product-cta.outline:hover { border-color: var(--sun); color: var(--sun); }
+
+/* ========== WHY SECTION ========== */
+.why {
+  padding: 6rem 3rem;
+  background: linear-gradient(180deg, var(--storm) 0%, #0a1628 100%);
+}
+.why-inner { max-width: 1200px; margin: 0 auto; }
+.why-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+.why-card {
+  background: rgba(22,27,34,0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--storm3);
+  border-radius: 12px;
+  padding: 2.5rem;
+  transition: border-color 0.3s;
+}
+.why-card:hover { border-color: rgba(232,169,23,0.3); }
+.why-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+.why-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.8rem; }
+.why-card p { color: var(--gray); font-size: 0.9rem; line-height: 1.7; }
+
+/* ========== HOW IT WORKS ========== */
+.how {
+  padding: 6rem 3rem;
+  max-width: 1000px; margin: 0 auto;
+}
+.steps { display: flex; flex-direction: column; gap: 0; }
+.step {
+  display: flex; gap: 2rem; align-items: flex-start;
+  padding: 2rem 0;
+  position: relative;
+}
+.step-num {
+  width: 56px; height: 56px; min-width: 56px;
+  background: var(--storm2);
+  border: 2px solid var(--sun);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Space Mono', monospace;
+  font-weight: 700; font-size: 1.2rem; color: var(--sun);
+  position: relative; z-index: 2;
+}
+.step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 27px; top: 70px; bottom: -10px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--sun), transparent);
+  z-index: 1;
+}
+.step-content h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
+.step-content p { color: var(--gray); font-size: 0.9rem; line-height: 1.6; }
+
+/* ========== CTA ========== */
+.cta-section {
+  padding: 6rem 3rem;
+  text-align: center;
+  background: linear-gradient(135deg, #0a1628 0%, var(--storm) 50%, #0a1628 100%);
+  position: relative;
+}
+.cta-section::before {
+  content: '';
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(232,169,23,0.06) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.cta-inner { position: relative; z-index: 2; max-width: 650px; margin: 0 auto; }
+.cta-section h2 { font-size: 2.5rem; font-weight: 900; margin-bottom: 1rem; }
+.cta-section p { color: var(--gray); font-size: 1.1rem; margin-bottom: 2rem; }
+.cta-phone {
+  font-family: 'Space Mono', monospace;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--sun);
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  transition: text-shadow 0.3s;
+}
+.cta-phone:hover { text-shadow: 0 0 30px rgba(232,169,23,0.5); }
+.cta-or { color: var(--gray); font-size: 0.85rem; margin-bottom: 1.5rem; }
+
+/* Form */
+.contact-form {
+  display: flex; gap: 0; max-width: 500px; margin: 0 auto;
+  border-radius: 8px; overflow: hidden;
+  border: 1px solid var(--storm3);
+}
+.contact-form input {
+  flex: 1;
+  background: var(--storm2);
+  border: none;
+  color: var(--white);
+  padding: 16px 20px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+}
+.contact-form input::placeholder { color: var(--gray); }
+.contact-form button {
+  background: var(--sun);
+  color: var(--storm);
+  border: none;
+  padding: 16px 28px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s;
+  white-space: nowrap;
+}
+.contact-form button:hover { background: var(--sun-bright); }
+
+/* ========== FOOTER ========== */
+footer {
+  padding: 3rem;
+  border-top: 1px solid var(--storm3);
+  text-align: center;
+}
+.footer-logo { font-weight: 800; font-size: 1.2rem; color: var(--sun); letter-spacing: 2px; margin-bottom: 1rem; }
+.footer-links { display: flex; justify-content: center; gap: 2rem; margin-bottom: 1rem; flex-wrap: wrap; }
+.footer-links a { color: var(--gray); text-decoration: none; font-size: 0.8rem; transition: color 0.3s; }
+.footer-links a:hover { color: var(--sun); }
+.footer-legal { color: var(--gray); font-size: 0.7rem; opacity: 0.6; }
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 900px) {
+  .product-grid { grid-template-columns: 1fr; max-width: 450px; margin: 0 auto; }
+  .why-grid { grid-template-columns: 1fr; }
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .hero { padding: 6rem 1.5rem 3rem; }
+  .hero-stat-row { gap: 1.5rem; }
+}
+
+/* ========== HURRICANE ANIMATION ========== */
+.hurricane-ready {
+  display: inline-block;
+  position: relative;
+}
+.hurricane-ready::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--sun), transparent);
+  animation: shimmer 2s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <div class="sun-icon"></div>
+    SOLARA
+  </a>
+  <div class="nav-links">
+    <a href="#products">Products</a>
+    <a href="#why">Why Solara</a>
+    <a href="#how">How It Works</a>
+    <a href="tel:7725211871" class="nav-cta">CALL 772-521-1871</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">🌴 Made in Florida — For Florida</div>
+    <h1>
+      <span class="light">Never Lose</span><br>
+      <span class="gold">Power Again.</span>
+    </h1>
+    <p class="hero-sub">
+      Plug-in solar + battery kits designed for hurricane season.<br>
+      No permits. No electrician. Power in 15 minutes.
+    </p>
+    <div class="hero-actions">
+      <a href="tel:7725211871" class="btn-primary">📞 Call 772-521-1871</a>
+      <a href="#products" class="btn-secondary">See Our Kits →</a>
+    </div>
+    <div class="hero-stat-row">
+      <div class="hero-stat"><div class="num">170mph</div><div class="lbl">Wind Rated</div></div>
+      <div class="hero-stat"><div class="num">15min</div><div class="lbl">Setup Time</div></div>
+      <div class="hero-stat"><div class="num">$0</div><div class="lbl">Permits Needed</div></div>
+      <div class="hero-stat"><div class="num">10yr</div><div class="lbl">Warranty</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-item"><span class="icon">🛡️</span> UL-Listed Components</div>
+  <div class="trust-item"><span class="icon">🏗️</span> Built by Licensed Electricians</div>
+  <div class="trust-item"><span class="icon">🌊</span> Hurricane-Rated Hardware</div>
+  <div class="trust-item"><span class="icon">🇺🇸</span> Assembled in Stuart, FL</div>
+  <div class="trust-item"><span class="icon">⚡</span> Backed by DEG</div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="products" id="products">
+  <div class="section-header">
+    <div class="section-tag">Our Solar Kits</div>
+    <h2>Choose Your Power Level</h2>
+    <p>Every kit ships pre-assembled with hurricane-rated mounting. Just unbox, mount, and plug in.</p>
+  </div>
+
+  <div class="product-grid">
+    <!-- STARTER -->
+    <div class="product-card">
+      <div class="product-tier">Tier 1</div>
+      <div class="product-name">Starter</div>
+      <div class="product-price">$799 <span>/ kit</span></div>
+      <ul class="product-specs">
+        <li><strong>400W</strong> solar panel</li>
+        <li><strong>600Wh</strong> LFP battery</li>
+        <li><strong>600W</strong> pure sine inverter</li>
+        <li>Hurricane-rated mount</li>
+        <li>WiFi monitoring app</li>
+        <li>Powers: phones, lights, fan</li>
+      </ul>
+      <a href="tel:7725211871" class="product-cta outline">Order Now → 772-521-1871</a>
+    </div>
+
+    <!-- HOME -->
+    <div class="product-card featured">
+      <div class="product-badge">MOST POPULAR</div>
+      <div class="product-tier">Tier 2</div>
+      <div class="product-name">Home</div>
+      <div class="product-price">$1,499 <span>/ kit</span></div>
+      <ul class="product-specs">
+        <li><strong>800W</strong> dual panel array</li>
+        <li><strong>2kWh</strong> LFP battery</li>
+        <li><strong>1,500W</strong> pure sine inverter</li>
+        <li>Hurricane-rated dual mount</li>
+        <li>Energy tracking dashboard</li>
+        <li>Powers: fridge, TV, fans, lights</li>
+      </ul>
+      <a href="tel:7725211871" class="product-cta primary">Order Now → 772-521-1871</a>
+    </div>
+
+    <!-- FORTRESS -->
+    <div class="product-card">
+      <div class="product-tier">Tier 3</div>
+      <div class="product-name">Fortress</div>
+      <div class="product-price">$2,499 <span>/ kit</span></div>
+      <ul class="product-specs">
+        <li><strong>1,600W</strong> quad panel array</li>
+        <li><strong>5kWh</strong> LFP battery</li>
+        <li><strong>3,000W</strong> pure sine inverter</li>
+        <li>Heavy-duty ground mount</li>
+        <li><strong>Pro install included</strong></li>
+        <li>Powers: whole home essentials 24hr+</li>
+      </ul>
+      <a href="tel:7725211871" class="product-cta outline">Order Now → 772-521-1871</a>
+    </div>
+  </div>
+
+  <p style="text-align:center;color:var(--gray);margin-top:2rem;font-size:0.85rem;">
+    Professional installation available for all tiers: $299-$599 &nbsp;|&nbsp; Financing available via Affirm
+  </p>
+</section>
+
+<!-- WHY -->
+<section class="why" id="why">
+  <div class="why-inner">
+    <div class="section-header">
+      <div class="section-tag">Why Solara</div>
+      <h2>Built for the Storm</h2>
+      <p>We're not selling solar panels. We're selling peace of mind — designed by Floridians who've been through it.</p>
+    </div>
+
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">🌀</div>
+        <h3>Hurricane-Rated to 170mph</h3>
+        <p>Every mount is PE-stamped for Florida wind zones. Our aluminum frames are tested beyond Cat 5 standards. Your panels stay put when the storm hits.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🔌</div>
+        <h3>Zero Permits. Zero Hassle.</h3>
+        <p>Our kits are self-contained off-grid battery systems. No utility interconnection, no building permits, no HOA electrical approvals needed. Plug in and go.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🏭</div>
+        <h3>Assembled in Stuart, FL</h3>
+        <p>Every kit is assembled by hand in our Stuart facility. Local jobs, local quality control, and next-day delivery anywhere on the Treasure Coast.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🔋</div>
+        <h3>LFP Battery Technology</h3>
+        <p>Lithium Iron Phosphate batteries last 10+ years, don't overheat in Florida summers, and are the safest chemistry available. No thermal runaway risk.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="section-header">
+    <div class="section-tag">How It Works</div>
+    <h2>Power in 15 Minutes</h2>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h3>Call Us or Order Online</h3>
+        <p>Call 772-521-1871 to talk to our team. We'll help you choose the right kit for your home, condo, or RV. Same-day shipping on in-stock kits.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h3>Unbox & Mount</h3>
+        <p>Every kit comes pre-assembled with color-coded connectors. Mount the panel on your balcony, patio, or yard using our hurricane-rated hardware. No tools beyond a wrench.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h3>Plug In & Power Up</h3>
+        <p>Connect the panel to the battery unit. That's it. The system starts charging immediately. Download the app to monitor your power in real-time.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h3>Sleep Easy During Hurricane Season</h3>
+        <p>When the grid goes down, your Solara keeps your essentials running. Phones charged, lights on, fridge cold. No gas, no fumes, no noise. Just the sun.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <h2>Ready to <span class="hurricane-ready">Own Your Power</span>?</h2>
+    <p>Talk to a Solara energy specialist today. We'll help you choose the perfect kit for your home.</p>
+    <a href="tel:7725211871" class="cta-phone">772-521-1871</a>
+    <div class="cta-or">— or leave your info and we'll reach out —</div>
+    <form class="contact-form" onsubmit="handleSubmit(event)">
+      <input type="text" placeholder="Your name" required>
+      <input type="tel" placeholder="Phone number" required>
+      <button type="submit">GET A CALL →</button>
+    </form>
+    <p style="margin-top:2rem;font-size:0.8rem;color:var(--gray);">
+      Financing available • Free shipping in Florida • 30-day satisfaction guarantee
+    </p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">☀ SOLARA SYSTEMS</div>
+  <div class="footer-links">
+    <a href="#products">Products</a>
+    <a href="#why">Why Solara</a>
+    <a href="#how">How It Works</a>
+    <a href="tel:7725211871">772-521-1871</a>
+  </div>
+  <div class="footer-legal">
+    © 2026 Solara Systems LLC — A Distributed Energy Group Company — Stuart, Florida<br>
+    All systems include UL-listed components. Hurricane rating based on independent PE certification.
+  </div>
+</footer>
+
+<script>
+// Nav scroll effect
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Form handler
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('button');
+  btn.textContent = '✓ WE\'LL CALL YOU!';
+  btn.style.background = '#2ECC71';
+  setTimeout(() => {
+    btn.textContent = 'GET A CALL →';
+    btn.style.background = '';
+    e.target.reset();
+  }, 3000);
+}
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>
