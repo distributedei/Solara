@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Solara Systems — Hurricane-Ready Solar Power for Florida Homes</title>
+<title>Distributed Home — Solar, Battery & Smart Energy for Florida Homes</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -378,6 +378,23 @@ footer {
   .hero-stat-row { gap: 1.5rem; }
 }
 
+/* ========== PRODUCT CATEGORY TABS ========== */
+.cat-tab {
+  padding: 12px 24px;
+  background: var(--storm2);
+  border: 1px solid var(--storm3);
+  color: var(--gray);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.cat-tab:hover { color: var(--white); border-color: var(--sun); }
+.cat-tab.active { background: var(--sun); color: var(--storm); border-color: var(--sun); }
+.product-category { display: none; }
+.product-category.active { display: block; animation: fadeIn 0.4s ease; }
+
 /* ========== PORTAL OVERLAY ========== */
 .portal-overlay {
   position: fixed; top: 0; left: 0; right: 0; bottom: 0;
@@ -524,11 +541,11 @@ footer {
 <nav id="navbar">
   <a href="#" class="nav-logo">
     <div class="sun-icon"></div>
-    SOLARA
+    DISTRIBUTED HOME
   </a>
   <div class="nav-links">
     <a href="#products">Products</a>
-    <a href="#why">Why Solara</a>
+    <a href="#why">Why Distributed Home</a>
     <a href="#how">How It Works</a>
     <a href="#" onclick="openPortal(event)" style="color:var(--gray);opacity:0.5;font-size:0.75rem;">🔒 Portal</a>
     <a href="tel:7725211871" class="nav-cta">CALL 772-521-1871</a>
@@ -540,16 +557,16 @@ footer {
   <div class="hero-content">
     <div class="hero-badge">🌴 Made in Florida — For Florida</div>
     <h1>
-      <span class="light">Never Lose</span><br>
-      <span class="gold">Power Again.</span>
+      <span class="light">Your Home.</span><br>
+      <span class="gold">Distributed.</span>
     </h1>
     <p class="hero-sub">
-      Plug-in solar + battery kits designed for hurricane season.<br>
-      No permits. No electrician. Power in 15 minutes.
+      Solar kits, battery backup, and smart energy products<br>
+      designed for Florida homeowners. No permits. No hassle. Just power.
     </p>
     <div class="hero-actions">
       <a href="tel:7725211871" class="btn-primary">📞 Call 772-521-1871</a>
-      <a href="#products" class="btn-secondary">See Our Kits →</a>
+      <a href="#products" class="btn-secondary">See Our Products →</a>
     </div>
     <div class="hero-stat-row">
       <div class="hero-stat"><div class="num">170mph</div><div class="lbl">Wind Rated</div></div>
@@ -572,72 +589,177 @@ footer {
 <!-- PRODUCTS -->
 <section class="products" id="products">
   <div class="section-header">
-    <div class="section-tag">Our Solar Kits</div>
-    <h2>Choose Your Power Level</h2>
-    <p>Every kit ships pre-assembled with hurricane-rated mounting. Just unbox, mount, and plug in.</p>
+    <div class="section-tag">Our Products</div>
+    <h2>Energy Products for Every Home</h2>
+    <p>From plug-in balcony solar kits to whole-home battery backup — locally assembled and hurricane-rated.</p>
   </div>
 
-  <div class="product-grid">
-    <!-- STARTER -->
-    <div class="product-card">
-      <div class="product-tier">Tier 1</div>
-      <div class="product-name">Starter</div>
-      <div class="product-price">$799 <span>/ kit</span></div>
-      <ul class="product-specs">
-        <li><strong>400W</strong> solar panel</li>
-        <li><strong>600Wh</strong> LFP battery</li>
-        <li><strong>600W</strong> pure sine inverter</li>
-        <li>Hurricane-rated mount</li>
-        <li>WiFi monitoring app</li>
-        <li>Powers: phones, lights, fan</li>
-      </ul>
-      <a href="tel:7725211871" class="product-cta outline">Order Now → 772-521-1871</a>
+  <!-- Product Category Tabs -->
+  <div style="display:flex;justify-content:center;gap:0;margin-bottom:2.5rem;">
+    <button onclick="showCategory('balcony')" id="tab-balcony" class="cat-tab active" style="border-radius:8px 0 0 8px;">☀️ Balcony Solar</button>
+    <button onclick="showCategory('battery')" id="tab-battery" class="cat-tab">🔋 Battery Backup</button>
+    <button onclick="showCategory('smart')" id="tab-smart" class="cat-tab" style="border-radius:0 8px 8px 0;">🏠 Smart Home Energy</button>
+  </div>
+
+  <!-- ===== BALCONY SOLAR ===== -->
+  <div id="cat-balcony" class="product-category active">
+    <div style="text-align:center;margin-bottom:2rem;">
+      <h3 style="font-size:1.6rem;font-weight:800;margin-bottom:0.5rem;">Balcony Solar Kits</h3>
+      <p style="color:var(--gray);font-size:0.9rem;max-width:600px;margin:0 auto;">Plug-in solar + battery systems for balconies, patios, and small spaces. Inspired by Germany's Balkonkraftwerk movement — adapted and hurricane-hardened for Florida.</p>
     </div>
 
-    <!-- HOME -->
-    <div class="product-card featured">
-      <div class="product-badge">MOST POPULAR</div>
-      <div class="product-tier">Tier 2</div>
-      <div class="product-name">Home</div>
-      <div class="product-price">$1,499 <span>/ kit</span></div>
-      <ul class="product-specs">
-        <li><strong>800W</strong> dual panel array</li>
-        <li><strong>2kWh</strong> LFP battery</li>
-        <li><strong>1,500W</strong> pure sine inverter</li>
-        <li>Hurricane-rated dual mount</li>
-        <li>Energy tracking dashboard</li>
-        <li>Powers: fridge, TV, fans, lights</li>
-      </ul>
-      <a href="tel:7725211871" class="product-cta primary">Order Now → 772-521-1871</a>
+    <div class="product-grid">
+      <!-- STARTER -->
+      <div class="product-card">
+        <div class="product-tier">Balcony Solar</div>
+        <div class="product-name">Starter</div>
+        <div class="product-price">$799 <span>/ kit</span></div>
+        <ul class="product-specs">
+          <li><strong>400W</strong> solar panel</li>
+          <li><strong>600Wh</strong> LFP battery</li>
+          <li><strong>600W</strong> pure sine inverter</li>
+          <li>Hurricane-rated balcony mount</li>
+          <li>WiFi monitoring app</li>
+          <li>Powers: phones, lights, fan</li>
+        </ul>
+        <a href="tel:7725211871" class="product-cta outline">Order Now → 772-521-1871</a>
+      </div>
+
+      <!-- HOME -->
+      <div class="product-card featured">
+        <div class="product-badge">MOST POPULAR</div>
+        <div class="product-tier">Balcony Solar</div>
+        <div class="product-name">Home</div>
+        <div class="product-price">$1,499 <span>/ kit</span></div>
+        <ul class="product-specs">
+          <li><strong>800W</strong> dual panel array</li>
+          <li><strong>2kWh</strong> LFP battery</li>
+          <li><strong>1,500W</strong> pure sine inverter</li>
+          <li>Hurricane-rated patio mount</li>
+          <li>Energy tracking dashboard</li>
+          <li>Powers: fridge, TV, fans, lights</li>
+        </ul>
+        <a href="tel:7725211871" class="product-cta primary">Order Now → 772-521-1871</a>
+      </div>
+
+      <!-- FORTRESS -->
+      <div class="product-card">
+        <div class="product-tier">Balcony Solar</div>
+        <div class="product-name">Fortress</div>
+        <div class="product-price">$2,499 <span>/ kit</span></div>
+        <ul class="product-specs">
+          <li><strong>1,600W</strong> quad panel array</li>
+          <li><strong>5kWh</strong> LFP battery</li>
+          <li><strong>3,000W</strong> pure sine inverter</li>
+          <li>Heavy-duty ground mount</li>
+          <li><strong>Pro install included</strong></li>
+          <li>Powers: whole home essentials 24hr+</li>
+        </ul>
+        <a href="tel:7725211871" class="product-cta outline">Order Now → 772-521-1871</a>
+      </div>
+    </div>
+    <p style="text-align:center;color:var(--gray);margin-top:2rem;font-size:0.85rem;">
+      Professional installation available for all tiers: $299-$599 &nbsp;|&nbsp; Financing available via Affirm
+    </p>
+  </div>
+
+  <!-- ===== BATTERY BACKUP ===== -->
+  <div id="cat-battery" class="product-category">
+    <div style="text-align:center;margin-bottom:2rem;">
+      <h3 style="font-size:1.6rem;font-weight:800;margin-bottom:0.5rem;">Battery Backup Systems</h3>
+      <p style="color:var(--gray);font-size:0.9rem;max-width:600px;margin:0 auto;">Standalone battery storage for homes that already have solar or just want grid-independent backup power for hurricane season.</p>
     </div>
 
-    <!-- FORTRESS -->
-    <div class="product-card">
-      <div class="product-tier">Tier 3</div>
-      <div class="product-name">Fortress</div>
-      <div class="product-price">$2,499 <span>/ kit</span></div>
-      <ul class="product-specs">
-        <li><strong>1,600W</strong> quad panel array</li>
-        <li><strong>5kWh</strong> LFP battery</li>
-        <li><strong>3,000W</strong> pure sine inverter</li>
-        <li>Heavy-duty ground mount</li>
-        <li><strong>Pro install included</strong></li>
-        <li>Powers: whole home essentials 24hr+</li>
-      </ul>
-      <a href="tel:7725211871" class="product-cta outline">Order Now → 772-521-1871</a>
+    <div class="product-grid">
+      <div class="product-card">
+        <div class="product-tier">Battery</div>
+        <div class="product-name">Essential</div>
+        <div class="product-price">$1,299 <span>/ unit</span></div>
+        <ul class="product-specs">
+          <li><strong>5kWh</strong> LFP battery</li>
+          <li><strong>3,000W</strong> continuous output</li>
+          <li>Whole-home transfer switch</li>
+          <li>Solar input ready (MPPT)</li>
+          <li>App monitoring + alerts</li>
+          <li>Powers: essentials for 12-18hrs</li>
+        </ul>
+        <a href="tel:7725211871" class="product-cta outline">Order Now → 772-521-1871</a>
+      </div>
+
+      <div class="product-card featured">
+        <div class="product-badge">HURRICANE READY</div>
+        <div class="product-tier">Battery</div>
+        <div class="product-name">Resilience</div>
+        <div class="product-price">$3,499 <span>/ unit</span></div>
+        <ul class="product-specs">
+          <li><strong>10kWh</strong> LFP battery</li>
+          <li><strong>5,000W</strong> continuous output</li>
+          <li>Automatic grid failover</li>
+          <li>Stackable (up to 40kWh)</li>
+          <li>Pro install included</li>
+          <li>Powers: full home 24-48hrs</li>
+        </ul>
+        <a href="tel:7725211871" class="product-cta primary">Order Now → 772-521-1871</a>
+      </div>
+
+      <div class="product-card">
+        <div class="product-tier">Battery</div>
+        <div class="product-name">Commercial</div>
+        <div class="product-price">Custom <span>/ quote</span></div>
+        <ul class="product-specs">
+          <li><strong>20-100kWh</strong> modular stacks</li>
+          <li><strong>10,000W+</strong> output</li>
+          <li>Peak shaving & demand response</li>
+          <li>Remote monitoring + API</li>
+          <li>Full engineering + install</li>
+          <li>Ideal for: offices, retail, HOAs</li>
+        </ul>
+        <a href="tel:7725211871" class="product-cta outline">Get a Quote → 772-521-1871</a>
+      </div>
     </div>
   </div>
 
-  <p style="text-align:center;color:var(--gray);margin-top:2rem;font-size:0.85rem;">
-    Professional installation available for all tiers: $299-$599 &nbsp;|&nbsp; Financing available via Affirm
-  </p>
+  <!-- ===== SMART HOME ===== -->
+  <div id="cat-smart" class="product-category">
+    <div style="text-align:center;margin-bottom:2rem;">
+      <h3 style="font-size:1.6rem;font-weight:800;margin-bottom:0.5rem;">Smart Home Energy</h3>
+      <p style="color:var(--gray);font-size:0.9rem;max-width:600px;margin:0 auto;">Intelligent energy management products that optimize your power usage, cut your bills, and keep your home running smarter.</p>
+    </div>
+
+    <div class="product-grid" style="grid-template-columns:repeat(3,1fr);">
+      <div class="product-card" style="text-align:center;padding:3rem 2rem;">
+        <div style="font-size:3rem;margin-bottom:1rem;">📊</div>
+        <div class="product-name" style="font-size:1.2rem;">Energy Monitor</div>
+        <p style="color:var(--gray);font-size:0.85rem;margin:1rem 0;">Real-time whole-home energy monitoring with circuit-level breakdown. Know exactly where every watt goes.</p>
+        <div class="product-price" style="font-size:1.3rem;">$249</div>
+        <span style="display:inline-block;margin-top:1rem;font-size:0.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:3px;background:rgba(232,169,23,0.15);color:var(--sun);">COMING Q3 2026</span>
+      </div>
+
+      <div class="product-card" style="text-align:center;padding:3rem 2rem;">
+        <div style="font-size:3rem;margin-bottom:1rem;">🔌</div>
+        <div class="product-name" style="font-size:1.2rem;">Smart Panel</div>
+        <p style="color:var(--gray);font-size:0.85rem;margin:1rem 0;">Intelligent load management panel that automatically prioritizes circuits during outages and optimizes grid usage.</p>
+        <div class="product-price" style="font-size:1.3rem;">$1,899</div>
+        <span style="display:inline-block;margin-top:1rem;font-size:0.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:3px;background:rgba(232,169,23,0.15);color:var(--sun);">COMING Q4 2026</span>
+      </div>
+
+      <div class="product-card" style="text-align:center;padding:3rem 2rem;">
+        <div style="font-size:3rem;margin-bottom:1rem;">⚡</div>
+        <div class="product-name" style="font-size:1.2rem;">EV Charger</div>
+        <p style="color:var(--gray);font-size:0.85rem;margin:1rem 0;">Level 2 home EV charger with solar integration and smart scheduling. Charge from the sun during peak production.</p>
+        <div class="product-price" style="font-size:1.3rem;">$699</div>
+        <span style="display:inline-block;margin-top:1rem;font-size:0.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:3px;background:rgba(232,169,23,0.15);color:var(--sun);">COMING 2027</span>
+      </div>
+    </div>
+  </div>
+
 </section>
 
 <!-- WHY -->
 <section class="why" id="why">
   <div class="why-inner">
     <div class="section-header">
-      <div class="section-tag">Why Solara</div>
+      <div class="section-tag">Why Distributed Home</div>
       <h2>Built for the Storm</h2>
       <p>We're not selling solar panels. We're selling peace of mind — designed by Floridians who've been through it.</p>
     </div>
@@ -700,7 +822,7 @@ footer {
       <div class="step-num">4</div>
       <div class="step-content">
         <h3>Sleep Easy During Hurricane Season</h3>
-        <p>When the grid goes down, your Solara keeps your essentials running. Phones charged, lights on, fridge cold. No gas, no fumes, no noise. Just the sun.</p>
+        <p>When the grid goes down, your Distributed Home keeps your essentials running. Phones charged, lights on, fridge cold. No gas, no fumes, no noise. Just the sun.</p>
       </div>
     </div>
   </div>
@@ -710,7 +832,7 @@ footer {
 <section class="cta-section">
   <div class="cta-inner">
     <h2>Ready to <span class="hurricane-ready">Own Your Power</span>?</h2>
-    <p>Talk to a Solara energy specialist today. We'll help you choose the perfect kit for your home.</p>
+    <p>Talk to a Distributed Home energy specialist today. We'll help you choose the perfect kit for your home.</p>
     <a href="tel:7725211871" class="cta-phone">772-521-1871</a>
     <div class="cta-or">— or leave your info and we'll reach out —</div>
     <form class="contact-form" onsubmit="handleSubmit(event)">
@@ -726,15 +848,15 @@ footer {
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-logo">☀ SOLARA SYSTEMS</div>
+  <div class="footer-logo">☀ DISTRIBUTED HOME</div>
   <div class="footer-links">
     <a href="#products">Products</a>
-    <a href="#why">Why Solara</a>
+    <a href="#why">Why Distributed Home</a>
     <a href="#how">How It Works</a>
     <a href="tel:7725211871">772-521-1871</a>
   </div>
   <div class="footer-legal">
-    © 2026 Solara Systems LLC — A Distributed Energy Group Company — Stuart, Florida<br>
+    © 2026 Distributed Home LLC — A Distributed Energy Group Company — Stuart, Florida<br>
     All systems include UL-listed components. Hurricane rating based on independent PE certification.
   </div>
 </footer>
@@ -746,7 +868,7 @@ footer {
   <!-- Login Screen -->
   <div class="portal-login" id="portalLogin">
     <div class="lock-icon">🔐</div>
-    <h2>Solara Command Center</h2>
+    <h2>Distributed Home Command Center</h2>
     <p>Enter your 6-digit access code</p>
     <div class="portal-pin" id="pinInputs">
       <input type="text" maxlength="1" inputmode="numeric" autofocus>
@@ -763,7 +885,7 @@ footer {
   <!-- Dashboard (shown after auth) -->
   <div class="portal-dashboard" id="portalDashboard">
     <div class="portal-dash-header">
-      <h2>☀ Solara Command Center</h2>
+      <h2>☀ Distributed Home Command Center</h2>
       <div class="user-badge"><div class="dot"></div> Authenticated</div>
     </div>
 
@@ -784,8 +906,8 @@ footer {
       </a>
       <a class="tool-card" href="#" onclick="return false;" style="--card-accent:#E8A917">
         <div class="tool-icon">⚡</div>
-        <div class="tool-name">Solara Production Tracker</div>
-        <div class="tool-desc">Kit assembly queue, QA checkpoints, inventory levels, and shipping status for all Solara product tiers.</div>
+        <div class="tool-name">Distributed Home Production Tracker</div>
+        <div class="tool-desc">Kit assembly queue, QA checkpoints, inventory levels, and shipping status for all Distributed Home product tiers.</div>
         <span class="tool-tag dev">COMING SOON</span>
       </a>
     </div>
@@ -818,7 +940,7 @@ footer {
     <div class="tool-grid">
       <a class="tool-card" href="#" onclick="return false;" style="--card-accent:#E67E22">
         <div class="tool-icon">💰</div>
-        <div class="tool-name">Solara Financial Dashboard</div>
+        <div class="tool-name">Distributed Home Financial Dashboard</div>
         <div class="tool-desc">Revenue tracking, COGS analysis, margin by product tier, monthly P&L, and cash flow projections.</div>
         <span class="tool-tag dev">COMING SOON</span>
       </a>
@@ -842,7 +964,7 @@ footer {
       <a class="tool-card" href="https://github.com/distributedei" target="_blank" style="--card-accent:#8B949E">
         <div class="tool-icon">🐙</div>
         <div class="tool-name">GitHub — distributedei</div>
-        <div class="tool-desc">All repos: Solara website, DEI Project Truth, pipeline tools, and more.</div>
+        <div class="tool-desc">All repos: Distributed Home website, DEI Project Truth, pipeline tools, and more.</div>
         <span class="tool-tag ext">GITHUB</span>
       </a>
       <a class="tool-card" href="https://portal.azure.com" target="_blank" style="--card-accent:#5FA8D3">
@@ -867,6 +989,14 @@ footer {
 window.addEventListener('scroll', () => {
   document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
 });
+
+// ========== PRODUCT CATEGORY TABS ==========
+function showCategory(cat) {
+  document.querySelectorAll('.product-category').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('cat-' + cat).classList.add('active');
+  document.getElementById('tab-' + cat).classList.add('active');
+}
 
 // ========== PORTAL LOGIC ==========
 const ACCESS_CODE = '772521'; // phone number last 6 digits
