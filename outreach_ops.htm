@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Distributed Home — Outreach Ops</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sun:#E8A917;--sun-lt:#FFD54F;--bg:#0B0E14;--bg2:#111520;--bg3:#181D2A;--bg4:#1F2537;
+  --border:#262D3D;--white:#E8ECF2;--gray:#6B7A90;--gray-lt:#8FA0B8;
+  --green:#34D399;--green-dk:#059669;--red:#F87171;--blue:#60A5FA;--purple:#A78BFA;--cyan:#22D3EE;--orange:#FB923C;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--white);min-height:100vh}
+
+/* TOP NAV */
+.topnav{
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:50;
+}
+.topnav .brand{display:flex;align-items:center;gap:10px;}
+.topnav .brand-dot{width:10px;height:10px;background:var(--sun);border-radius:50%;box-shadow:0 0 10px rgba(232,169,23,0.4)}
+.topnav .brand-name{font-size:0.7rem;font-weight:700;letter-spacing:2px;color:var(--sun);text-transform:uppercase}
+.topnav .brand-sep{color:var(--border);margin:0 4px}
+.topnav .app-name{font-size:0.85rem;font-weight:600;color:var(--white)}
+.topnav-actions{display:flex;gap:8px;align-items:center}
+
+/* TABS */
+.tabs{
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  padding:0 24px;display:flex;gap:0;overflow-x:auto;
+}
+.tab{
+  padding:12px 20px;font-size:0.8rem;font-weight:600;color:var(--gray);
+  cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;
+}
+.tab:hover{color:var(--white)}
+.tab.active{color:var(--sun);border-bottom-color:var(--sun)}
+
+.container{max-width:1100px;margin:0 auto;padding:24px}
+
+/* BTN */
+.btn{
+  display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:6px;
+  font-family:'Outfit',sans-serif;font-size:0.8rem;font-weight:600;border:none;cursor:pointer;transition:all 0.2s;
+}
+.btn-gold{background:var(--sun);color:var(--bg)}
+.btn-gold:hover{background:var(--sun-lt)}
+.btn-dark{background:var(--bg3);color:var(--white);border:1px solid var(--border)}
+.btn-dark:hover{border-color:var(--sun);color:var(--sun)}
+.btn-sm{padding:5px 10px;font-size:0.72rem}
+
+/* KPI */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.kpi{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px}
+.kpi .lbl{font-size:0.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray);margin-bottom:6px}
+.kpi .val{font-family:'JetBrains Mono',monospace;font-size:1.6rem;font-weight:700}
+.kpi .val.gold{color:var(--sun)} .kpi .val.green{color:var(--green)} .kpi .val.blue{color:var(--blue)}
+.kpi .sub{font-size:0.7rem;color:var(--gray);margin-top:4px}
+
+/* PANEL */
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:10px;margin-bottom:20px;overflow:hidden}
+.panel-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.panel-head h2{font-size:0.9rem;font-weight:700}
+.panel-body{padding:20px}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{text-align:left;font-size:0.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray);padding:10px 14px;border-bottom:1px solid var(--border);background:var(--bg3)}
+.tbl td{padding:10px 14px;font-size:0.82rem;border-bottom:1px solid rgba(255,255,255,0.03)}
+.tbl tr:hover td{background:rgba(232,169,23,0.02)}
+.mono{font-family:'JetBrains Mono',monospace;font-size:0.78rem}
+
+/* TAG */
+.tag{display:inline-block;font-size:0.6rem;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:0.5px}
+.tag-sent{background:rgba(96,165,250,0.12);color:var(--blue)}
+.tag-replied{background:rgba(52,211,153,0.12);color:var(--green)}
+.tag-called{background:rgba(232,169,23,0.12);color:var(--sun)}
+.tag-booked{background:rgba(167,139,250,0.12);color:var(--purple)}
+.tag-won{background:rgba(52,211,153,0.2);color:var(--green)}
+.tag-lost{background:rgba(248,113,113,0.12);color:var(--red)}
+.tag-week{background:rgba(232,169,23,0.08);color:var(--sun)}
+
+/* SUBJECT LINE CARD */
+.subject-card{
+  background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;
+  transition:border-color 0.3s;cursor:pointer;
+}
+.subject-card:hover{border-color:var(--sun)}
+.subject-card.current{border-color:var(--green);background:rgba(52,211,153,0.04)}
+.subject-week{font-size:0.6rem;font-weight:700;letter-spacing:1px;color:var(--gray);text-transform:uppercase;min-width:50px}
+.subject-text{flex:1;margin:0 16px;font-size:0.85rem;font-weight:500}
+.subject-stats{display:flex;gap:16px;font-size:0.72rem;color:var(--gray)}
+.subject-stats span{font-family:'JetBrains Mono',monospace}
+
+/* EMAIL PREVIEW */
+.email-preview{
+  background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:20px;
+  font-size:0.85rem;line-height:1.8;color:var(--gray-lt);
+  max-width:600px;margin:0 auto;
+}
+.email-preview .from{font-size:0.7rem;color:var(--gray);margin-bottom:12px}
+.email-preview .subject{font-weight:700;color:var(--white);font-size:0.9rem;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.email-preview .var{color:var(--sun);font-weight:600}
+.email-preview .sig{margin-top:16px;padding-top:12px;border-top:1px solid var(--border);color:var(--gray);font-size:0.8rem}
+
+/* LEAD LOG */
+.log-input-row{display:flex;gap:8px;margin-bottom:16px}
+.log-input-row input,.log-input-row select{
+  background:var(--bg);border:1px solid var(--border);color:var(--white);
+  padding:8px 12px;border-radius:6px;font-family:'Outfit',sans-serif;font-size:0.82rem;outline:none;
+}
+.log-input-row input:focus,.log-input-row select:focus{border-color:var(--sun)}
+.log-input-row input{flex:1}
+
+/* CSV TOOL */
+.csv-zone{
+  border:2px dashed var(--border);border-radius:10px;padding:40px;text-align:center;
+  transition:border-color 0.3s;cursor:pointer;
+}
+.csv-zone:hover{border-color:var(--sun)}
+.csv-zone.dragover{border-color:var(--green);background:rgba(52,211,153,0.04)}
+.csv-output{
+  background:var(--bg);border:1px solid var(--border);border-radius:8px;
+  padding:16px;margin-top:16px;display:none;
+}
+.csv-output textarea{
+  width:100%;background:transparent;border:none;color:var(--gray-lt);
+  font-family:'JetBrains Mono',monospace;font-size:0.75rem;resize:vertical;min-height:120px;outline:none;
+}
+
+/* PAGES */
+.page{display:none}.page.active{display:block}
+
+/* SETUP STEPS */
+.setup-step{
+  display:flex;gap:16px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,0.03);
+}
+.step-num{
+  width:32px;height:32px;min-width:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;font-size:0.8rem;font-weight:700;
+}
+.step-num.done{background:rgba(52,211,153,0.15);color:var(--green);border:1px solid var(--green-dk)}
+.step-num.pending{background:var(--bg3);color:var(--gray);border:1px solid var(--border)}
+.step-num.active{background:rgba(232,169,23,0.15);color:var(--sun);border:1px solid var(--sun)}
+.step-info h4{font-size:0.85rem;font-weight:600;margin-bottom:4px}
+.step-info p{font-size:0.75rem;color:var(--gray);line-height:1.6}
+.step-info a{color:var(--sun);text-decoration:none}
+.step-info a:hover{text-decoration:underline}
+
+@media(max-width:768px){
+  .kpi-row{grid-template-columns:repeat(2,1fr)}
+  .log-input-row{flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<div class="topnav">
+  <div class="brand">
+    <div class="brand-dot"></div>
+    <span class="brand-name">Distributed Home</span>
+    <span class="brand-sep">|</span>
+    <span class="app-name">Outreach Ops</span>
+  </div>
+  <div class="topnav-actions">
+    <span style="font-size:0.7rem;color:var(--gray)">📞 772-521-1871</span>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" onclick="showPage('dashboard',this)">Dashboard</div>
+  <div class="tab" onclick="showPage('email',this)">The Email</div>
+  <div class="tab" onclick="showPage('subjects',this)">Subject Lines</div>
+  <div class="tab" onclick="showPage('replies',this)">Reply Log</div>
+  <div class="tab" onclick="showPage('csv',this)">Lead Upload</div>
+  <div class="tab" onclick="showPage('setup',this)">Setup Guide</div>
+</div>
+
+<div class="container">
+
+  <!-- ===== DASHBOARD ===== -->
+  <div class="page active" id="page-dashboard">
+    <div class="kpi-row">
+      <div class="kpi"><div class="lbl">Emails Sent</div><div class="val gold" id="kSent">0</div><div class="sub">This week</div></div>
+      <div class="kpi"><div class="lbl">Replies</div><div class="val green" id="kReplies">0</div><div class="sub">Conversations started</div></div>
+      <div class="kpi"><div class="lbl">Calls Made</div><div class="val blue" id="kCalls">0</div><div class="sub">From replies</div></div>
+      <div class="kpi"><div class="lbl">Meetings Booked</div><div class="val gold" id="kBooked">0</div><div class="sub">Consultations set</div></div>
+    </div>
+
+    <!-- Current Week -->
+    <div class="panel">
+      <div class="panel-head">
+        <h2>📧 This Week's Send</h2>
+        <span class="tag tag-week" id="currentWeekTag">Week 1</span>
+      </div>
+      <div class="panel-body">
+        <div style="display:flex;gap:20px;align-items:flex-start">
+          <div style="flex:1">
+            <div style="font-size:0.65rem;font-weight:700;letter-spacing:1px;color:var(--gray);text-transform:uppercase;margin-bottom:6px">Subject Line</div>
+            <div style="font-size:1.1rem;font-weight:700;color:var(--sun);margin-bottom:16px" id="currentSubject">—</div>
+            <div style="display:flex;gap:24px">
+              <div><div style="font-size:0.6rem;color:var(--gray);text-transform:uppercase;letter-spacing:1px">Audience</div><div class="mono" style="font-size:1.1rem;margin-top:4px" id="currentAudience">0</div></div>
+              <div><div style="font-size:0.6rem;color:var(--gray);text-transform:uppercase;letter-spacing:1px">Sent</div><div class="mono" style="font-size:1.1rem;margin-top:4px" id="currentSentCount">0</div></div>
+              <div><div style="font-size:0.6rem;color:var(--gray);text-transform:uppercase;letter-spacing:1px">Opens</div><div class="mono" style="font-size:1.1rem;margin-top:4px" id="currentOpens">0</div></div>
+              <div><div style="font-size:0.6rem;color:var(--gray);text-transform:uppercase;letter-spacing:1px">Replies</div><div class="mono" style="font-size:1.1rem;margin-top:4px;color:var(--green)" id="currentReplies">0</div></div>
+            </div>
+          </div>
+          <div>
+            <a href="https://app.instantly.ai" target="_blank" class="btn btn-gold">Open Instantly.ai →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Replies -->
+    <div class="panel">
+      <div class="panel-head">
+        <h2>💬 Recent Replies</h2>
+        <button class="btn btn-dark btn-sm" onclick="showPage('replies',document.querySelectorAll('.tab')[3])">View All →</button>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="tbl" id="recentRepliesTable">
+          <thead><tr><th>Name</th><th>Email</th><th>Status</th><th>When</th><th>Action</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== THE EMAIL ===== -->
+  <div class="page" id="page-email">
+    <div class="panel">
+      <div class="panel-head">
+        <h2>📧 The One Email</h2>
+        <button class="btn btn-dark btn-sm" onclick="copyEmail()">📋 Copy to Clipboard</button>
+      </div>
+      <div class="panel-body">
+        <p style="font-size:0.8rem;color:var(--gray);margin-bottom:20px">This is the email. One email. Sent every week with a rotating subject line. Plain text, no images, no HTML. Lands in primary inbox.</p>
+        <div class="email-preview" id="emailPreview">
+          <div class="from">From: hunter@distributedhome.com</div>
+          <div class="subject" id="previewSubject">{city} homeowners are doing this before hurricane season</div>
+          Hi <span class="var">{first_name}</span>,<br><br>
+          We sell plug-in solar battery kits out of Stuart. No permits, no electrician — plugs in on your balcony or patio in 15 minutes. Keeps your fridge, phones, and lights on when FPL goes down.<br><br>
+          Kits start at $799. Hurricane rated to 170mph.<br><br>
+          772-521-1871 if you want one.<br>
+          <div class="sig">
+            — Hunter<br>
+            Distributed Home<br>
+            distributedhome.com
+          </div>
+        </div>
+        <div style="margin-top:20px;padding:16px;background:var(--bg3);border-radius:8px">
+          <div style="font-size:0.7rem;font-weight:700;color:var(--gray);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Merge Variables</div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <code style="background:var(--bg);padding:4px 10px;border-radius:4px;font-size:0.75rem;color:var(--sun)">{first_name}</code>
+            <code style="background:var(--bg);padding:4px 10px;border-radius:4px;font-size:0.75rem;color:var(--sun)">{city}</code>
+            <code style="background:var(--bg);padding:4px 10px;border-radius:4px;font-size:0.75rem;color:var(--sun)">{street}</code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SUBJECT LINES ===== -->
+  <div class="page" id="page-subjects">
+    <div class="panel">
+      <div class="panel-head">
+        <h2>🔄 Weekly Subject Line Rotation</h2>
+        <button class="btn btn-gold btn-sm" onclick="addSubjectLine()">+ Add Subject</button>
+      </div>
+      <div class="panel-body" id="subjectList"></div>
+    </div>
+  </div>
+
+  <!-- ===== REPLY LOG ===== -->
+  <div class="page" id="page-replies">
+    <div class="panel">
+      <div class="panel-head">
+        <h2>💬 Reply & Outcome Log</h2>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-dark btn-sm" onclick="exportReplies()">Export CSV</button>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="log-input-row">
+          <input type="text" id="logName" placeholder="Name">
+          <input type="email" id="logEmail" placeholder="Email">
+          <input type="tel" id="logPhone" placeholder="Phone">
+          <select id="logStatus">
+            <option value="replied">Replied</option>
+            <option value="called">Called Back</option>
+            <option value="booked">Meeting Booked</option>
+            <option value="won">Won — Kit Sold</option>
+            <option value="lost">Not Interested</option>
+          </select>
+          <input type="text" id="logNotes" placeholder="Notes..." style="min-width:200px">
+          <button class="btn btn-gold" onclick="addReply()">+ Log</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="tbl" id="replyLogTable">
+          <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Status</th><th>Notes</th><th>Date</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CSV LEAD UPLOAD ===== -->
+  <div class="page" id="page-csv">
+    <div class="panel">
+      <div class="panel-head"><h2>📤 Lead List Formatter for Instantly</h2></div>
+      <div class="panel-body">
+        <p style="font-size:0.8rem;color:var(--gray);margin-bottom:16px">Paste your PropertyRadar export or any lead list below. This tool reformats it into the exact CSV format Instantly.ai expects.</p>
+        <div style="margin-bottom:16px">
+          <div style="font-size:0.65rem;font-weight:700;letter-spacing:1px;color:var(--gray);text-transform:uppercase;margin-bottom:6px">Paste CSV data (first_name, last_name, email, city, street)</div>
+          <textarea id="csvInput" style="width:100%;background:var(--bg);border:1px solid var(--border);color:var(--gray-lt);font-family:'JetBrains Mono',monospace;font-size:0.75rem;padding:14px;border-radius:8px;min-height:150px;outline:none;resize:vertical" placeholder="John,Smith,john@email.com,Stuart,123 Main St&#10;Maria,Gonzalez,maria@gmail.com,Jupiter,456 Ocean Blvd&#10;..."></textarea>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:16px">
+          <button class="btn btn-gold" onclick="formatCSV()">Format for Instantly</button>
+          <button class="btn btn-dark" onclick="clearCSV()">Clear</button>
+        </div>
+        <div class="csv-output" id="csvOutput">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <span style="font-size:0.7rem;font-weight:700;color:var(--green)">✓ Ready to import — copy and paste into Instantly</span>
+            <button class="btn btn-dark btn-sm" onclick="copyCSV()">📋 Copy</button>
+          </div>
+          <textarea id="csvFormatted" readonly></textarea>
+          <div style="margin-top:8px;font-size:0.7rem;color:var(--gray)" id="csvCount"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h2>📋 Instantly Import Instructions</h2></div>
+      <div class="panel-body" style="font-size:0.82rem;color:var(--gray-lt);line-height:1.8">
+        1. Copy the formatted CSV above<br>
+        2. Open <a href="https://app.instantly.ai" target="_blank" style="color:var(--sun)">app.instantly.ai</a> → Lead Lists → Upload Leads<br>
+        3. Paste or upload the CSV file<br>
+        4. Map columns: first_name, last_name, email, city, custom1 (street)<br>
+        5. Assign to your active campaign<br>
+        6. Instantly dedupes and validates emails automatically
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SETUP GUIDE ===== -->
+  <div class="page" id="page-setup">
+    <div class="panel">
+      <div class="panel-head"><h2>🚀 Setup Checklist</h2></div>
+      <div class="panel-body" id="setupSteps"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ===== STATE =====
+const DEFAULT_SUBJECTS = [
+  { week:1, text:"{city} homeowners are doing this before hurricane season", sent:0, opens:0, replies:0 },
+  { week:2, text:"FPL just raised rates again", sent:0, opens:0, replies:0 },
+  { week:3, text:"what your neighbors on {street} are buying this month", sent:0, opens:0, replies:0 },
+  { week:4, text:"the $799 thing that replaces your generator", sent:0, opens:0, replies:0 },
+  { week:5, text:"quick question about your {city} place", sent:0, opens:0, replies:0 },
+  { week:6, text:"power went out in {city} last week", sent:0, opens:0, replies:0 },
+];
+
+const SETUP = [
+  { done:false, title:"Sign up for Instantly.ai", desc:'Go to <a href="https://instantly.ai" target="_blank">instantly.ai</a> and grab the Growth plan ($97/mo). This is your email sending engine.' },
+  { done:false, title:"Buy 5 sending domains", desc:'Go to Namecheap or GoDaddy. Buy: distributedhome-energy.com, dhsolarflorida.com, distributedpower.co, flbalconysolar.com, homesolarkits.co (~$10 each)' },
+  { done:false, title:"Create Google Workspace accounts", desc:'Create one Google Workspace account per domain ($7/mo each). Use hunter@ or hello@ as the sender address.' },
+  { done:false, title:"Connect accounts to Instantly", desc:'In Instantly → Email Accounts → Add. Connect all 5 Gmail accounts. Enable auto-warmup. Wait 14 days.' },
+  { done:false, title:"Sign up for PropertyRadar", desc:'Go to <a href="https://propertyradar.com" target="_blank">propertyradar.com</a> ($50/mo). Pull homeowner records for Martin, St. Lucie, Palm Beach counties. Filter: owner-occupied, condos + SFH. Export with email.' },
+  { done:false, title:"Format and upload leads", desc:'Use the Lead Upload tab to format your PropertyRadar export for Instantly. Upload 5,000-10,000 contacts to start.' },
+  { done:false, title:"Create campaign in Instantly", desc:'New campaign → paste the email body → set daily send limit to 50/day per account (250 total). Schedule Mon-Fri 8am-11am EST.' },
+  { done:false, title:"Launch and monitor", desc:'Hit send. Check Instantly daily for replies. Log every reply and call outcome in the Reply Log tab. Rotate subject line every Monday.' },
+];
+
+function loadState() {
+  return {
+    subjects: JSON.parse(localStorage.getItem('dh_subjects') || 'null') || DEFAULT_SUBJECTS,
+    replies: JSON.parse(localStorage.getItem('dh_replies') || '[]'),
+    setup: JSON.parse(localStorage.getItem('dh_setup') || 'null') || SETUP.map(s=>s.done),
+    currentWeek: parseInt(localStorage.getItem('dh_currentWeek') || '1'),
+    weeklyStats: JSON.parse(localStorage.getItem('dh_weeklyStats') || '{"sent":0,"audience":5000}'),
+  };
+}
+function saveState(state) {
+  localStorage.setItem('dh_subjects', JSON.stringify(state.subjects));
+  localStorage.setItem('dh_replies', JSON.stringify(state.replies));
+  localStorage.setItem('dh_setup', JSON.stringify(state.setup));
+  localStorage.setItem('dh_currentWeek', state.currentWeek);
+  localStorage.setItem('dh_weeklyStats', JSON.stringify(state.weeklyStats));
+}
+
+let STATE = loadState();
+
+// ===== RENDER =====
+function render() {
+  // KPIs
+  const totalSent = STATE.subjects.reduce((s,x)=>s+x.sent,0);
+  const totalReplies = STATE.replies.length;
+  const totalCalls = STATE.replies.filter(r=>['called','booked','won','lost'].includes(r.status)).length;
+  const totalBooked = STATE.replies.filter(r=>['booked','won'].includes(r.status)).length;
+  document.getElementById('kSent').textContent = totalSent.toLocaleString();
+  document.getElementById('kReplies').textContent = totalReplies;
+  document.getElementById('kCalls').textContent = totalCalls;
+  document.getElementById('kBooked').textContent = totalBooked;
+
+  // Current week
+  const cw = STATE.subjects.find(s=>s.week===STATE.currentWeek) || STATE.subjects[0];
+  document.getElementById('currentWeekTag').textContent = 'Week ' + STATE.currentWeek;
+  document.getElementById('currentSubject').textContent = '"' + cw.text + '"';
+  document.getElementById('currentAudience').textContent = STATE.weeklyStats.audience.toLocaleString();
+  document.getElementById('currentSentCount').textContent = cw.sent.toLocaleString();
+  document.getElementById('currentOpens').textContent = cw.opens.toLocaleString();
+  document.getElementById('currentReplies').textContent = cw.replies.toLocaleString();
+  document.getElementById('previewSubject').textContent = cw.text;
+
+  // Recent replies (last 5)
+  const recent = [...STATE.replies].reverse().slice(0,5);
+  document.querySelector('#recentRepliesTable tbody').innerHTML = recent.length ? recent.map(r=>`
+    <tr>
+      <td style="font-weight:600">${r.name}</td>
+      <td class="mono" style="font-size:0.75rem">${r.email}</td>
+      <td>${statusTag(r.status)}</td>
+      <td style="font-size:0.75rem;color:var(--gray)">${r.date}</td>
+      <td>${r.phone?`<a href="tel:${r.phone}" class="btn btn-dark btn-sm">📞 Call</a>`:''}</td>
+    </tr>
+  `).join('') : '<tr><td colspan="5" style="text-align:center;color:var(--gray);padding:30px">No replies logged yet. They\'ll show up here as you log them.</td></tr>';
+
+  // Subject lines
+  document.getElementById('subjectList').innerHTML = STATE.subjects.map((s,i)=>`
+    <div class="subject-card ${s.week===STATE.currentWeek?'current':''}" onclick="setCurrentWeek(${s.week})">
+      <div class="subject-week">W${s.week}</div>
+      <div class="subject-text">${s.text}${s.week===STATE.currentWeek?' <span style="color:var(--green);font-size:0.65rem;font-weight:700">● ACTIVE</span>':''}</div>
+      <div class="subject-stats">
+        <span>${s.sent} sent</span>
+        <span>${s.opens} opens</span>
+        <span style="color:var(--green)">${s.replies} replies</span>
+      </div>
+      <button class="btn btn-dark btn-sm" onclick="event.stopPropagation();editSubjectStats(${i})" style="margin-left:12px">✏️</button>
+    </div>
+  `).join('');
+
+  // Reply log
+  const allReplies = [...STATE.replies].reverse();
+  document.querySelector('#replyLogTable tbody').innerHTML = allReplies.length ? allReplies.map((r,i)=>`
+    <tr>
+      <td style="font-weight:600">${r.name}</td>
+      <td class="mono" style="font-size:0.75rem">${r.email}</td>
+      <td class="mono" style="font-size:0.75rem">${r.phone||'—'}</td>
+      <td>${statusTag(r.status)}</td>
+      <td style="font-size:0.78rem;color:var(--gray);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.notes||''}</td>
+      <td style="font-size:0.75rem;color:var(--gray)">${r.date}</td>
+      <td><button class="btn btn-sm" style="background:rgba(248,113,113,0.1);color:var(--red)" onclick="deleteReply(${STATE.replies.length-1-i})">✕</button></td>
+    </tr>
+  `).join('') : '<tr><td colspan="7" style="text-align:center;color:var(--gray);padding:30px">Log your first reply above ↑</td></tr>';
+
+  // Setup
+  document.getElementById('setupSteps').innerHTML = SETUP.map((s,i)=>`
+    <div class="setup-step">
+      <div class="step-num ${STATE.setup[i]?'done':'pending'}" onclick="toggleSetup(${i})" style="cursor:pointer" title="Click to toggle">${STATE.setup[i]?'✓':i+1}</div>
+      <div class="step-info">
+        <h4 style="${STATE.setup[i]?'text-decoration:line-through;opacity:0.5':''}">${s.title}</h4>
+        <p>${s.desc}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+function statusTag(st) {
+  const map = {replied:'tag-replied',called:'tag-called',booked:'tag-booked',won:'tag-won',lost:'tag-lost'};
+  const labels = {replied:'Replied',called:'Called',booked:'Booked',won:'Won',lost:'Not Interested'};
+  return `<span class="tag ${map[st]||'tag-sent'}">${labels[st]||st}</span>`;
+}
+
+// ===== ACTIONS =====
+function showPage(page, tab) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  if(tab) tab.classList.add('active');
+}
+
+function setCurrentWeek(w) {
+  STATE.currentWeek = w;
+  saveState(STATE);
+  render();
+}
+
+function editSubjectStats(idx) {
+  const s = STATE.subjects[idx];
+  const sent = prompt('Emails sent for Week '+s.week+':', s.sent);
+  if(sent===null) return;
+  const opens = prompt('Opens:', s.opens);
+  if(opens===null) return;
+  const replies = prompt('Replies:', s.replies);
+  if(replies===null) return;
+  STATE.subjects[idx].sent = parseInt(sent)||0;
+  STATE.subjects[idx].opens = parseInt(opens)||0;
+  STATE.subjects[idx].replies = parseInt(replies)||0;
+  saveState(STATE);
+  render();
+}
+
+function addSubjectLine() {
+  const text = prompt('New subject line (use {city}, {first_name}, {street} as variables):');
+  if(!text) return;
+  STATE.subjects.push({ week:STATE.subjects.length+1, text, sent:0, opens:0, replies:0 });
+  saveState(STATE);
+  render();
+}
+
+function addReply() {
+  const name = document.getElementById('logName').value.trim();
+  const email = document.getElementById('logEmail').value.trim();
+  const phone = document.getElementById('logPhone').value.trim();
+  const status = document.getElementById('logStatus').value;
+  const notes = document.getElementById('logNotes').value.trim();
+  if(!name&&!email) return alert('Enter at least a name or email');
+  STATE.replies.push({ name, email, phone, status, notes, date: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}) });
+  saveState(STATE);
+  ['logName','logEmail','logPhone','logNotes'].forEach(id=>document.getElementById(id).value='');
+  render();
+}
+
+function deleteReply(idx) {
+  if(!confirm('Delete this reply?')) return;
+  STATE.replies.splice(idx,1);
+  saveState(STATE);
+  render();
+}
+
+function toggleSetup(idx) {
+  STATE.setup[idx] = !STATE.setup[idx];
+  saveState(STATE);
+  render();
+}
+
+function copyEmail() {
+  const cw = STATE.subjects.find(s=>s.week===STATE.currentWeek) || STATE.subjects[0];
+  const body = `Subject: ${cw.text}\n\nHi {first_name},\n\nWe sell plug-in solar battery kits out of Stuart. No permits, no electrician — plugs in on your balcony or patio in 15 minutes. Keeps your fridge, phones, and lights on when FPL goes down.\n\nKits start at $799. Hurricane rated to 170mph.\n\n772-521-1871 if you want one.\n\n— Hunter\nDistributed Home\ndistributedhome.com`;
+  navigator.clipboard.writeText(body).then(()=>alert('Email copied to clipboard!'));
+}
+
+function formatCSV() {
+  const raw = document.getElementById('csvInput').value.trim();
+  if(!raw) return alert('Paste your lead data first');
+  const lines = raw.split('\n').filter(l=>l.trim());
+  let output = 'first_name,last_name,email,city,custom1\n';
+  let count = 0;
+  lines.forEach(line => {
+    const parts = line.split(',').map(p=>p.trim());
+    if(parts.length >= 3 && parts[2].includes('@')) {
+      output += parts.slice(0,5).join(',') + '\n';
+      count++;
+    }
+  });
+  document.getElementById('csvOutput').style.display = 'block';
+  document.getElementById('csvFormatted').value = output;
+  document.getElementById('csvCount').textContent = count + ' leads formatted and ready for Instantly import';
+}
+
+function copyCSV() {
+  navigator.clipboard.writeText(document.getElementById('csvFormatted').value).then(()=>alert('CSV copied!'));
+}
+
+function clearCSV() {
+  document.getElementById('csvInput').value = '';
+  document.getElementById('csvOutput').style.display = 'none';
+}
+
+function exportReplies() {
+  let csv = 'Name,Email,Phone,Status,Notes,Date\n';
+  STATE.replies.forEach(r => csv += `"${r.name}","${r.email}","${r.phone}","${r.status}","${r.notes}","${r.date}"\n`);
+  const blob = new Blob([csv],{type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'distributed_home_replies_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+}
+
+function refreshData() { render(); }
+
+// INIT
+render();
+</script>
+</body>
+</html>
